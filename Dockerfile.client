@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Установка зависимостей
+COPY package*.json ./
+RUN npm install
+
+# Копируем только client-часть и tsconfig
+COPY src/client ./src/client
+COPY src/client/tsconfig.json ./tsconfig.json
+COPY src/client/index.html ./index.html
+
+# Компиляция
+RUN npx tsc -p tsconfig.json
+
+EXPOSE 5173
+CMD ["npm", "run", "dev"]
